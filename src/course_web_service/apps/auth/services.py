@@ -13,15 +13,19 @@ logger = logging.getLogger(__name__)
 
 
 class UserService:
+    """Класс для управления пользователями: регистрация, аутентификация, управление токенами."""
+
     def __init__(
         self,
         manager: UserManager = Depends(UserManager),
         auth: AuthHandler = Depends(AuthHandler),
     ):
+        """Инициализирует сервис пользователей."""
         self.auth = auth
         self.manager = manager
 
     async def register_user(self, user: RegisterUser) -> UserReturnData:
+        """Регистрирует нового пользователя."""
         logger.info(f"Starting registration for user: {user.email}")
         try:
             hashed_password = await self.auth.get_password_hash(user.password)
@@ -29,10 +33,11 @@ class UserService:
 
             return await self.manager.create_user(user=new_user)
         except Exception as e:
-            logger.error(f"Failed to register user {user.email}: {e}")
+            logger.error(f"Failed to register user {user.email}: {e}", exc_info=True)
             raise
 
     async def authenticate_user(self, email: str, password: str) -> UserReturnData:
+        """Аутентифицирует пользователя."""
         logger.info(f"Authenticating user: {email}")
         try:
             user = await self.manager.get_user_by_email(email)
@@ -45,10 +50,11 @@ class UserService:
             logger.info(f"User {email} authenticated successfully.")
             return UserReturnData(**user.model_dump())
         except Exception as e:
-            logger.error(f"Error during authentication for user {email}: {e}")
+            logger.error(f"Error during authentication for user {email}: {e}", exc_info=True)
             raise
 
     async def get_current_user(self, token: str) -> UserReturnData:
+        """Возвращает текущего пользователя по токену."""
         payload = await self.auth.decode_access_token(token)
         email = payload.get("sub")
         if not email:
@@ -60,7 +66,10 @@ class UserService:
 
         return user
 
-    async def login_for_access_token(self, form_data: OAuth2PasswordRequestForm = Depends()) -> dict:
+    async def login_for_access_token(
+        self, form_data: OAuth2PasswordRequestForm = Depends()
+    ) -> dict:
+        """Создает access- и refresh-токены для пользователя."""
         user = await self.authenticate_user(form_data.username, form_data.password)
 
         access_token = await self.auth.create_access_token(
@@ -70,7 +79,7 @@ class UserService:
 
         refresh_token = await self.auth.create_refresh_token(
             data={"sub": user.email},
-            expires_delta=timedelta(days=settings.auth_settings.refrsh_token_expire_days),
+            expires_delta=timedelta(days=settings.auth_settings.refresh_token_expire_days),
         )
 
         return {
@@ -80,6 +89,7 @@ class UserService:
         }
 
     async def refresh_access_token(self, refresh_token: str):
+        """Обновляет access-токен с помощью refresh-токена."""
         payload = await self.auth.decode_refresh_token(refresh_token)
         email = payload.get("sub")
         if not email:
