@@ -9,6 +9,15 @@ class GetUserByID(BaseModel):
 
     id: uuid.UUID | str
 
+    @field_validator("id")
+    def validate_uuid(cls, value):
+        if isinstance(value, str):
+            try:
+                uuid.UUID(value)
+            except ValueError:
+                raise ValueError("Некорректный UUID.")
+        return value
+
     class Config:
         json_encoders = {
             uuid.UUID: lambda v: str(v),
@@ -26,12 +35,6 @@ class RegisterUser(GetUserByEmail):
 
     password: str = Field(..., min_length=8, description="Пароль должен быть не менее 8 символов.")
 
-    @field_validator("password")
-    def validate_password(cls, value):
-        if len(value) < 8:
-            raise ValueError("Пароль должен быть не менее 8 символов.")
-        return value
-
 
 class CreateUser(GetUserByEmail):
     """Схема для создания пользователя в базе данных."""
@@ -46,7 +49,9 @@ class UserReturnData(GetUserByEmail, GetUserByID):
     is_superuser: bool = Field(..., description="Является ли пользователь суперпользователем.")
     is_verified: bool = Field(..., description="Подтвержден ли email пользователя.")
     created_at: datetime.datetime = Field(..., description="Дата и время создания пользователя.")
-    updated_at: datetime.datetime = Field(..., description="Дата и время последнего обновления пользователя.")
+    updated_at: datetime.datetime = Field(
+        ..., description="Дата и время последнего обновления пользователя."
+    )
 
     class Config:
         json_encoders = {
@@ -54,8 +59,23 @@ class UserReturnData(GetUserByEmail, GetUserByID):
         }
 
 
-class UserInDB(CreateUser, UserReturnData):
-    pass
+class UserInDB(BaseModel):
+    """Схема для хранения пользователя в базе данных."""
+
+    id: uuid.UUID
+    email: EmailStr
+    hashed_password: str
+    is_active: bool
+    is_superuser: bool
+    is_verified: bool
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+
+    class Config:
+        json_encoders = {
+            uuid.UUID: lambda v: str(v),
+            datetime.datetime: lambda v: v.isoformat(),
+        }
 
 
 class Token(BaseModel):
