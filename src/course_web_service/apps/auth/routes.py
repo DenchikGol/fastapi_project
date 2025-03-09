@@ -3,7 +3,13 @@ import logging
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from course_web_service.apps.auth.schemas import RegisterUser, Token, UserReturnData
+from course_web_service.apps.auth.schemas import (
+    DeleteUserResponse,
+    RegisterUser,
+    Token,
+    UpdateUser,
+    UserReturnData,
+)
 from course_web_service.apps.auth.security import oauth2_scheme
 from course_web_service.apps.auth.services import UserService
 
@@ -47,3 +53,22 @@ async def read_users_me(
 ):
     """Возвращает данные текущего пользователя."""
     return await service.get_current_user(token)
+
+
+@auth_router.patch("/me", response_model=UserReturnData)
+async def update_current_user(
+    update_data: UpdateUser,
+    service: UserService = Depends(UserService),
+    token: str = Depends(oauth2_scheme),
+):
+    """Обновляет данные текущего пользователя."""
+    return await service.update_current_user(token, update_data)
+
+
+@auth_router.delete("/me", response_model=DeleteUserResponse)
+async def delete_current_user(
+    service: UserService = Depends(UserService),
+    token: str = Depends(oauth2_scheme),
+):
+    """Удаляет текущего пользователя."""
+    return await service.delete_current_user(token)

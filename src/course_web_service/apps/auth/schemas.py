@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 class GetUserByID(BaseModel):
@@ -10,18 +10,15 @@ class GetUserByID(BaseModel):
     id: uuid.UUID | str
 
     @field_validator("id")
-    def validate_uuid(cls, value):
+    def validate_uuid(cls, value):  # noqa: N805
         if isinstance(value, str):
             try:
                 uuid.UUID(value)
             except ValueError:
-                raise ValueError("Некорректный UUID.")
+                raise ValueError("Некорректный UUID.") from None
         return value
 
-    class Config:
-        json_encoders = {
-            uuid.UUID: lambda v: str(v),
-        }
+    model_config = ConfigDict(json_encoders={uuid.UUID: lambda v: str(v)})
 
 
 class GetUserByEmail(BaseModel):
@@ -53,10 +50,7 @@ class UserReturnData(GetUserByEmail, GetUserByID):
         ..., description="Дата и время последнего обновления пользователя."
     )
 
-    class Config:
-        json_encoders = {
-            datetime.datetime: lambda v: v.isoformat(),
-        }
+    model_config = ConfigDict(json_encoders={datetime: lambda v: v.isoformat()})
 
 
 class UserInDB(BaseModel):
@@ -71,11 +65,35 @@ class UserInDB(BaseModel):
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
-    class Config:
-        json_encoders = {
+    model_config = ConfigDict(
+        json_encoders={
             uuid.UUID: lambda v: str(v),
             datetime.datetime: lambda v: v.isoformat(),
         }
+    )
+
+
+class UpdateUser(BaseModel):
+    """Схема для обновления данных пользователя."""
+
+    password: str | None = Field(
+        None, min_length=8, description="Пароль должен быть не менее 8 символов."
+    )
+
+
+class UpdateUserToDB(BaseModel):
+    """Схема для сохранения обновленных данных пользователя в базу данных."""
+
+    hashed_password: str
+    updated_at: datetime.datetime
+
+    model_config = ConfigDict(json_encoders={datetime.datetime: lambda v: v.isoformat()})
+
+
+class DeleteUserResponse(BaseModel):
+    """Схема для ответа после удаления пользователя."""
+
+    message: str = Field(..., description="Сообщение об успешном удалении.")
 
 
 class Token(BaseModel):

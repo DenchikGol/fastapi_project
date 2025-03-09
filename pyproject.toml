@@ -17,7 +17,8 @@ dependencies = [
     "alembic (>=1.14.1,<2.0.0)",
     "email-validator (>=2.2.0,<3.0.0)",
     "passlib (>=1.7.4,<2.0.0)",
-    "pyjwt (>=2.10.1,<3.0.0)"
+    "pyjwt (>=2.10.1,<3.0.0)",
+    "bcrypt (>=4.3.0,<5.0.0)"
 ]
 
 [tool.poetry]
@@ -26,8 +27,9 @@ packages = [{include = "course_web_service", from = "src"}]
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.8"
-pytest = "^7.4.0"
+pytest = "^8.2.0"
 httpx = "^0.25.0"
+pytest-asyncio = "^0.25.3"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -35,8 +37,8 @@ build-backend = "poetry.core.masonry.api"
 
 [project.scripts]  
 app = "course_web_service.main:start"
-migrate = "alembic upgrade head"
-makemigrations = "alembic revision --autogenerate -m 'New migration'"
+migrate = "course_web_service.database.migrations_scripts:run_migrations"
+makemigrations = "course_web_service.database.migrations_scripts:make_migrations"
 
 [tool.ruff]
 line-length = 100

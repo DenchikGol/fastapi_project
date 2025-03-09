@@ -1,12 +1,14 @@
 import logging
 
 from fastapi import Depends, HTTPException, status
-from sqlalchemy import insert, select
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import IntegrityError
 
 from course_web_service.apps.auth.schemas import (
     CreateUser,
+    DeleteUserResponse,
     GetUserByEmail,
+    UpdateUserToDB,
     UserInDB,
     UserReturnData,
 )
@@ -65,3 +67,39 @@ class UserManager:
                 )
 
             return UserInDB(**user_data.__dict__)
+
+    async def update_user_info(
+        self, user_email: str, update_data: UpdateUserToDB
+    ) -> UserReturnData:
+        """Обновляет данные пользователя в базе данных."""
+        logger.info(f"Updating user with email: {user_email}")
+        async with self.db.db_session() as session:
+            query = (
+                update(self.model)
+                .where(self.model.email == user_email)
+                .values(**update_data.model_dump(exclude_unset=True))
+                .returning(self.model)
+            )
+            result = await session.execute(query)
+            await session.commit()
+            user_data = result.scalars().first()
+            if not user_data:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found.",
+                )
+            return UserReturnData(**user_data.__dict__)
+
+    async def delete_user(self, user_email: str) -> DeleteUserResponse:
+        """Удаляет пользователя из базы данных."""
+        logger.info(f"Deleting user with email: {user_email}")
+        async with self.db.db_session() as session:
+            query = delete(self.model).where(self.model.email == user_email)
+            result = await session.execute(query)
+            await session.commit()
+            if result.rowcount == 0:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found.",
+                )
+            return DeleteUserResponse(message="User deleted successfully.")

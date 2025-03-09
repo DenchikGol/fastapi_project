@@ -27,30 +27,27 @@ class AuthHandler:
 
     async def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         """Создает access-токен."""
-        to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(UTC) + expires_delta
         else:
             expire = datetime.now(UTC) + timedelta(
                 minutes=settings.auth_settings.access_token_expire_minutes
             )
-        to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(payload=to_encode, key=self.secret, algorithms=[self.algorithm])
-        return encoded_jwt
+        return await self._create_token(data=data, expires_delta=expire)
 
-    async def decode_access_token(self, token: str) -> dict:
+    async def decode_token(self, token: str, token_type_for_logger: str) -> dict:
         """Декодирует access-токен."""
         try:
             payload = jwt.decode(token, self.secret, algorithms=[self.algorithm])
             return payload
         except jwt.ExpiredSignatureError:
-            logger.warning("Access token has expired.")
+            logger.warning(f"{token_type_for_logger} token has expired.")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired.",
             ) from None
         except jwt.InvalidTokenError:
-            logger.warning("Invalid access token.")
+            logger.warning(f"Invalid {token_type_for_logger} token.")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token.",
@@ -58,31 +55,21 @@ class AuthHandler:
 
     async def create_refresh_token(self, data: dict, expires_delta: timedelta | None = None) -> str:
         """Создает refresh-токен."""
-        to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(UTC) + expires_delta
         else:
             expire = datetime.now(UTC) + timedelta(
                 days=settings.auth_settings.refresh_token_expire_days
             )
-        to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(payload=to_encode, key=self.secret, algorithm=self.algorithm)
-        return encoded_jwt
+        return await self._create_token(data=data, expires_delta=expire)
 
-    async def decode_refresh_token(self, token: str) -> dict:
-        """Декодирует refresh-токен."""
-        try:
-            payload = jwt.decode(token, self.secret, algorithms=[self.algorithm])
-            return payload
-        except jwt.ExpiredSignatureError:
-            logger.warning("Refresh token has expired.")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Refresh token has expired.",
-            ) from None
-        except jwt.InvalidTokenError:
-            logger.warning("Invalid refresh token.")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid refresh token.",
-            ) from None
+    async def _create_token(
+        self,
+        data: dict,
+        expires_delta: timedelta,
+    ) -> str:
+        """Общий метод для создания токенов."""
+        to_encode = data.copy()
+        expire = datetime.now(UTC) + expires_delta
+        to_encode.update({"exp": expire})
+        return jwt.encode(payload=to_encode, key=self.secret, algorithm=self.algorithm)
