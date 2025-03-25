@@ -1,0 +1,8 @@
+2025-03-25 13:33:31,730 - course_web_service - INFO - Logger initialized successfully
+2025-03-25 13:33:32,252 - course_web_service - INFO - Logger initialized successfully
+2025-03-25 13:33:36,485 - course_web_service.main - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2025-03-25 13:33:36,486 - course_web_service.main - INFO - Shutdown complete
+2025-03-25 13:48:37,894 - course_web_service - INFO - Logger initialized successfully
+2025-03-25 13:48:38,422 - course_web_service - INFO - Logger initialized successfully
+2025-03-25 13:48:42,625 - course_web_service.main - ERROR - Startup failed: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2025-03-25 13:48:42,628 - course_web_service.main - INFO - Shutdown complete

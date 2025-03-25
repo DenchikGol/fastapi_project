@@ -62,6 +62,7 @@ ignore = [
     "W191",  # indentation contains tabs
     "D401",  # imperative mood
     "B008",  # function-call-in-default-argument (cause Depends for FastAPI)
+    "S101",  # assert detected
 
 ]
 
@@ -70,3 +71,6 @@ convention = "google"
 
 [tool.ruff.lint.isort]
 known-first-party = ["course_web_service"]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

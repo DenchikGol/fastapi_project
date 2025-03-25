@@ -1,0 +1,9 @@
+users:
+  -
+    "first_name": "Admin"
+    "last_name": "Adminovich"
+    "role_id": 1
+  -
+    "first_name": "Manager"
+    "last_name": "Manag"
+    "role_id": 2

@@ -4,10 +4,11 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import IntegrityError
 
-from course_web_service.apps.auth.schemas import (
+from course_web_service.apps.user_app.schemas import (
     CreateUser,
     DeleteUserResponse,
     GetUserByEmail,
+    GetUserByID,
     UpdateUserToDB,
     UserInDB,
     UserReturnData,
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class UserManager:
-    """Класс для управления пользователями: создание и поиск."""
+    """Класс для управления пользователями: CRUD."""
 
     def __init__(self, model: type[User] = User, db: DBDependency = Depends(DBDependency)) -> None:
         """Инициализирует менеджер пользователей."""
@@ -49,6 +50,30 @@ class UserManager:
         """Возвращает пользователя по email."""
         async with self.db.db_session() as session:
             query = select(self.model).filter(self.model.email == user.email)
+
+            try:
+                result = await session.execute(query)
+            except Exception as e:
+                logger.error(f"Error fetching user by email: {e}", exc_info=True)
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)
+                ) from None
+
+            user_data = result.scalars().first()
+
+            if not user_data:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found.",
+                )
+
+            return UserInDB(**user_data.__dict__)
+
+    async def get_user_by_id(self, user: GetUserByID) -> UserInDB:
+        """Возвращает пользователя по ID."""
+
+        async with self.db.db_session() as session:
+            query = select(self.model).filter(self.model.id == user.id)
 
             try:
                 result = await session.execute(query)

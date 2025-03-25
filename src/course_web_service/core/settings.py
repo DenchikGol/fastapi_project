@@ -1,4 +1,4 @@
-from pydantic import SecretStr
+from pydantic import EmailStr, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -31,11 +31,39 @@ class AuthSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf8", extra="ignore")
 
 
+class InitialAppSettings(BaseSettings):
+    """Настройки для инициалтзации приложения."""
+
+    admin_email: EmailStr
+    admin_password: SecretStr
+    manager_email: EmailStr
+    manager_password: SecretStr
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf8", extra="ignore")
+
+
+class LoggerSettings(BaseSettings):
+    """Настройки для логгера."""
+
+    log_dir: str
+    log_file: str
+    log_format: str
+    max_log_size: int
+    backup_count: int
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf8", extra="ignore")
+
+
 class Settings(BaseSettings):
     """Основные настройки приложения."""
 
+    app_name: str
     db_settings: DBSettings = DBSettings()
     auth_settings: AuthSettings = AuthSettings()
+    init_app_settings: InitialAppSettings = InitialAppSettings()
+    logger_settings: LoggerSettings = LoggerSettings()
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf8", extra="ignore")
 
 
 settings = Settings()

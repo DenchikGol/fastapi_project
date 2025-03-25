@@ -1,0 +1,262 @@
+2025-03-21 13:23:19,599 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:23:19,599 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:25:09,508 - course_web_service.apps.auth_app.services - INFO - Starting registration for user: superuser@example.com
+2025-03-21 13:25:09,508 - course_web_service.apps.auth_app.services - INFO - Starting registration for user: superuser@example.com
+2025-03-21 13:25:09,510 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\python\course_web_service\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-03-21 13:25:09,510 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\python\course_web_service\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2025-03-21 13:25:09,705 - course_web_service.apps.user_app.manager - INFO - Starting writing new user to DB: superuser@example.com
+2025-03-21 13:25:09,705 - course_web_service.apps.user_app.manager - INFO - Starting writing new user to DB: superuser@example.com
+2025-03-21 13:25:13,787 - course_web_service.apps.auth_app.services - ERROR - Failed to register user superuser@example.com: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+Traceback (most recent call last):
+  File "C:\python\course_web_service\src\course_web_service\apps\auth_app\services.py", line 38, in register_user
+    return await self.manager.create_user(user=new_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\src\course_web_service\apps\user_app\manager.py", line 37, in create_user
+    result = await session.execute(query)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2241, in _execute_internal
+    conn = self._connection_for_bind(bind)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2110, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+           ^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3274, in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3298, in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 712, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\impl.py", line 177, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 674, in __init__
+    self.__connect()
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 900, in __connect
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\create.py", line 646, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 622, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 961, in connect
+    await_only(creator_fn(*arg, **kw)),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connection.py", line 2421, in connect
+    return await connect_utils._connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 1075, in _connect
+    raise last_error or exceptions.TargetServerAttributeNotMatched(
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 1049, in _connect
+    conn = await _connect_addr(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 886, in _connect_addr
+    return await __connect_addr(params, True, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 931, in __connect_addr
+    tr, pr = await connector
+             ^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 802, in _create_ssl_connection
+    tr, pr = await loop.create_connection(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nogpo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1135, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2025-03-21 13:25:13,787 - course_web_service.apps.auth_app.services - ERROR - Failed to register user superuser@example.com: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+Traceback (most recent call last):
+  File "C:\python\course_web_service\src\course_web_service\apps\auth_app\services.py", line 38, in register_user
+    return await self.manager.create_user(user=new_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\src\course_web_service\apps\user_app\manager.py", line 37, in create_user
+    result = await session.execute(query)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2241, in _execute_internal
+    conn = self._connection_for_bind(bind)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2110, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+           ^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3274, in connect
+    return self._connection_cls(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3298, in raw_connection
+    return self.pool.connect()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 712, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\impl.py", line 177, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 674, in __init__
+    self.__connect()
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 900, in __connect
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\create.py", line 646, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 622, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 961, in connect
+    await_only(creator_fn(*arg, **kw)),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connection.py", line 2421, in connect
+    return await connect_utils._connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 1075, in _connect
+    raise last_error or exceptions.TargetServerAttributeNotMatched(
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 1049, in _connect
+    conn = await _connect_addr(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 886, in _connect_addr
+    return await __connect_addr(params, True, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 931, in __connect_addr
+    tr, pr = await connector
+             ^^^^^^^^^^^^^^^
+  File "C:\python\course_web_service\.venv\Lib\site-packages\asyncpg\connect_utils.py", line 802, in _create_ssl_connection
+    tr, pr = await loop.create_connection(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\nogpo\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1135, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 5432, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 5432)
+2025-03-21 13:26:13,804 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:13,804 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,158 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,158 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,514 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,514 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,868 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:14,868 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,219 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,219 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,575 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,575 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,930 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:15,930 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:16,288 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:16,288 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:16,645 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:16,645 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,000 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,000 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,356 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,356 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,707 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:17,707 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,073 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,073 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,434 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,434 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,790 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:18,790 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,145 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,145 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,500 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,500 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,858 - watchfiles.main - INFO - 1 change detected
+2025-03-21 13:26:19,858 - watchfiles.main - INFO - 1 change detected

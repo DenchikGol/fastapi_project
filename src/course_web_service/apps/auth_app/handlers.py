@@ -33,7 +33,7 @@ class AuthHandler:
             expire = datetime.now(UTC) + timedelta(
                 minutes=settings.auth_settings.access_token_expire_minutes
             )
-        return await self._create_token(data=data, expires_delta=expire)
+        return await self._create_token(data=data, expire=expire)
 
     async def decode_token(self, token: str, token_type_for_logger: str) -> dict:
         """Декодирует access-токен."""
@@ -61,15 +61,14 @@ class AuthHandler:
             expire = datetime.now(UTC) + timedelta(
                 days=settings.auth_settings.refresh_token_expire_days
             )
-        return await self._create_token(data=data, expires_delta=expire)
+        return await self._create_token(data=data, expire=expire)
 
     async def _create_token(
         self,
         data: dict,
-        expires_delta: timedelta,
+        expire: datetime,
     ) -> str:
         """Общий метод для создания токенов."""
         to_encode = data.copy()
-        expire = datetime.now(UTC) + expires_delta
         to_encode.update({"exp": expire})
         return jwt.encode(payload=to_encode, key=self.secret, algorithm=self.algorithm)

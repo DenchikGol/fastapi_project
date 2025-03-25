@@ -1,0 +1,17 @@
+roles:
+  -
+    "id": 1
+    "name": "Admin"
+    "description": "Администратор системы"
+  -
+    "id": 2
+    "name": "Manager"
+    "description": "Менеджер системы"
+  -
+    "id": 3
+    "name": "Curator"
+    "description": "Куратор курсов"
+  -
+    "id": 4
+    "name": "User"
+    "description": "Обычный пользователь системы"

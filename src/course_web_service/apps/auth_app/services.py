@@ -1,35 +1,30 @@
-import datetime
 import logging
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from course_web_service.apps.auth.enums import JWTTokenTypeForLogging
-from course_web_service.apps.auth.handlers import AuthHandler
-from course_web_service.apps.auth.managers import UserManager
-from course_web_service.apps.auth.schemas import (
+from course_web_service.apps.auth_app.enums import JWTTokenTypeForLogging
+from course_web_service.apps.auth_app.handlers import AuthHandler
+from course_web_service.apps.user_app.manager import UserManager
+from course_web_service.apps.user_app.schemas import (
     CreateUser,
-    DeleteUserResponse,
     GetUserByEmail,
     RegisterUser,
-    Token,
-    UpdateUser,
-    UpdateUserToDB,
     UserReturnData,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class UserService:
-    """Класс для управления пользователями: регистрация, аутентификация, управление токенами."""
+class AuthService:
+    """Класс для управления аутентификацией: вход, обновление токенов."""
 
     def __init__(
         self,
         manager: UserManager = Depends(UserManager),
         auth: AuthHandler = Depends(AuthHandler),
     ):
-        """Инициализирует сервис пользователей."""
+        """Инициализирует сервис аутентификации."""
         self.auth = auth
         self.manager = manager
 
@@ -67,10 +62,10 @@ class UserService:
             )
             raise
 
-    async def get_current_user(self, token: Token) -> UserReturnData:
+    async def get_current_user(self, token: str) -> UserReturnData:
         """Возвращает текущего пользователя по токену."""
         payload = await self.auth.decode_token(
-            token=token.access_token, token_type_for_logger=JWTTokenTypeForLogging.ACCESS
+            token=token.access_token, token_type_for_logger=JWTTokenTypeForLogging.ACCESS.value
         )
         email = payload.get("sub")
         if not email:
@@ -101,7 +96,7 @@ class UserService:
     async def refresh_access_token(self, refresh_token: str):
         """Обновляет access-токен с помощью refresh-токена."""
         payload = await self.auth.decode_token(
-            refresh_token, token_type_for_logger=JWTTokenTypeForLogging.REFRESH
+            refresh_token, token_type_for_logger=JWTTokenTypeForLogging.REFRESH.value
         )
         email = payload.get("sub")
         if not email:
@@ -117,19 +112,3 @@ class UserService:
             "refresh_token": refresh_token,
             "token_type": "bearer",
         }
-
-    async def update_current_user(self, token: str, update_data: UpdateUser) -> UserReturnData:
-        """Обновляет данные пользователя."""
-        user = await self.get_current_user(token)
-        logger.info(f"Updating user with email: {user.email}")
-        update_user = UpdateUserToDB(**user.model_dump())
-        if update_data.password:
-            update_user.hashed_password = await self.auth.get_password_hash(update_data.password)
-        update_user.updated_at = datetime.UTC
-        return await self.manager.update_user_info(user_email=user.email, update_data=update_user)
-
-    async def delete_current_user(self, token: str) -> DeleteUserResponse:
-        """Удаляет пользователя."""
-        user = await self.get_current_user(token)
-        logger.info(f"Deleting user with email: {user.email}")
-        return await self.manager.delete_user(user_email=user.email)
